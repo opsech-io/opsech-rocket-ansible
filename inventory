@@ -1,0 +1,4 @@
+[chat_servers]
+chat.opsech.io ansible_user=centos
+
+
