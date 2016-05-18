@@ -1,0 +1,12 @@
+---
+
+- hosts: chat_servers
+  become: yes
+
+  vars:
+    rocket_chat_tarball_sha256sum: 813f85262187fe7b352145ce49a7d8c9ad06398e6a1b53d94f0a27978a0fb0c9
+    rocket_chat_automatic_upgrades: true
+    rocket_chat_service_host: "{{ inventory_hostname }}"
+
+  roles:
+    - RocketChat.Server

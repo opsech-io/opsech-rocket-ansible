@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    ansible_requirements_loc: roles/requirements.yml
+
+  tasks:
+    - name: Install missing roles
+      command: ansible-galaxy install --ignore-errors -r "{{ ansible_requirements_loc }}"
+
+- include: tasks/rocket_chat.yml
+
+

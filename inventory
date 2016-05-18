@@ -1,4 +1,12 @@
-[chat_servers]
-chat.opsech.io ansible_user=centos
+[centos_servers]
+chat.opsech.io
+54.88.203.236
+
+[centos_servers:vars]
+ansible_user=centos
+
+[chat_servers:children]
+centos_servers
+
 
 
