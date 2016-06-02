@@ -1,6 +1,5 @@
 [centos_servers]
 chat.opsech.io
-54.88.203.236
 
 [centos_servers:vars]
 ansible_user=centos
