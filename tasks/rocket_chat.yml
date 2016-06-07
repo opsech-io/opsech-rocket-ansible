@@ -4,7 +4,7 @@
   become: yes
 
   vars:
-    rocket_chat_tarball_sha256sum: b78df55796aa5454f9116d08f978c3428f9922ac7699e2e7fcc330ed267ba5fd
+    rocket_chat_tarball_sha256sum: a65a85b2e83c8481291a295824197274406c0a2dda8b172e39160bec150d027d
     rocket_chat_automatic_upgrades: true
     rocket_chat_service_host: "{{ inventory_hostname }}"
 
