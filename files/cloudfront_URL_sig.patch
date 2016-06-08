@@ -1,0 +1,70 @@
+--- a/bundle/programs/server/packages/rocketchat_file-upload.js  2016-06-08 04:23:31.256729119 +0000
++++ b/bundle/programs/server/packages/rocketchat_file-upload.js  2016-06-08 21:30:03.515200186 +0000
+@@ -286,65 +286,31 @@
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                                        //
+ /* globals Slingshot, FileUpload, AWS, SystemLogger */                                                                 //
+ var crypto = Npm.require('crypto');                                                                                    // 2
+                                                                                                                        //
+ var S3accessKey, S3secretKey;                                                                                          // 4
+                                                                                                                        //
+ var generateURL = function (file) {                                                                                    // 6
+ 	if (!file || !file.s3) {                                                                                              // 7
+ 		return;                                                                                                              // 8
+-	};                                                                                                                    //
++	}                                                                                                                     //
+ 	var resourceURL = '/' + file.s3.bucket + '/' + file.s3.path + file._id;                                               // 10
+ 	var expires = parseInt(new Date().getTime() / 1000) + 60;                                                             // 11
+ 	var StringToSign = 'GET\n\n\n' + expires + '\n' + resourceURL;                                                        // 12
+ 	var signature = crypto.createHmac('sha1', S3secretKey).update(new Buffer(StringToSign, 'utf-8')).digest('base64');    // 13
+ 	return file.url + '?AWSAccessKeyId=' + encodeURIComponent(S3accessKey) + '&Expires=' + expires + '&Signature=' + encodeURIComponent(signature);
+ };                                                                                                                     //
+                                                                                                                        //
+-var generateCDNURL = function (file) {
+-    if (!file || !file.s3) {
+-        return;
+-    }
+-    var fs = Npm.require('fs');
+-    var CFKeyPairId = 'APKAJPZ4INQGQJXKFMOQ'; // UI+Mongo
+-    var CFSecretKey = fs.readFileSync('/var/lib/rocket.chat/secret_key.pem'); // UI+Mongo
+-    var expires = parseInt(Date.now() / 1000) + 60;
+-    var PolicyToSign = {
+-        "Statement": [{
+-            "Resource": file.url,
+-            "Condition": {
+-                "DateLessThan": {
+-                    "AWS:EpochTime": expires
+-                }
+-            }
+-        }]
+-    }; // Maybe UI for custom policy? + Mongo
+-
+-    var sign = crypto.createSign('RSA-SHA1'),
+-        pem = CFSecretKey,
+-        key = pem.toString('ascii');
+-
+-    sign.update(JSON.stringify(PolicyToSign));
+-    var signature = sign.sign(key, 'base64');
+-    var params = [
+-        'Key-Pair-Id=' + encodeURIComponent(CFKeyPairId),
+-        'Expires=' + expires,
+-        'Signature=' + encodeURIComponent(signature)
+-    ];
+-    var cdnURL = file.url + "?" +  params.join('&');
+-    return cdnURL;
+-};
+-
+ FileUpload.addHandler('s3', {                                                                                          // 17
+ 	get: function (file, req, res) {                                                                                      // 18
+-		var fileUrl = generateCDNURL(file);                                                                                     // 19
++		var fileUrl = generateURL(file);                                                                                     // 19
+                                                                                                                        //
+ 		if (fileUrl) {                                                                                                       // 21
+ 			res.setHeader('Location', fileUrl);                                                                                 // 22
+ 			res.writeHead(302);                                                                                                 // 23
+ 		}                                                                                                                    //
+ 		res.end();                                                                                                           // 25
+ 	},                                                                                                                    //
+ 	'delete': function (file) {                                                                                           // 27
+ 		var s3 = new AWS.S3();                                                                                               // 28
+ 		var request = s3.deleteObject({                                                                                      // 29

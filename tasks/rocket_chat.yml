@@ -5,3 +5,6 @@
 
   roles:
     - RocketChat.Server
+
+  tasks:
+    - include: patches/cloudfront_patch.yml

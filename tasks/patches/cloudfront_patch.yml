@@ -1,0 +1,10 @@
+---
+
+  - name: Patch rocketchat_file-upload.js for CloudFront URL Signing
+    patch:
+      backup: yes
+      src: ../files/cloudfront_URL_sig.patch
+      basedir: "{{ rocket_chat_application_path }}/bundle"
+      strip: 2
+    # This handler is in Role: Rocket.Chat.Server
+    notify: Restart the Rocket.Chat service
