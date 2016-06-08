@@ -1,3 +1,4 @@
 *.retry
-roles/RocketChat.Server
+roles/*
+!roles/requirements.yml
 *.swp
