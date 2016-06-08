@@ -1,9 +1,6 @@
 [centos_servers]
 chat.opsech.io
 
-[centos_servers:vars]
-ansible_user=centos
-
 [chat_servers:children]
 centos_servers
 
