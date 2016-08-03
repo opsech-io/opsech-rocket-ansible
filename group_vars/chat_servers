@@ -1,4 +1,4 @@
 ---
-rocket_chat_tarball_sha256sum: 4ab0baeb6f1ed3c7b7cb8366c49c1f50627b01bfd0f6b0d4df1d6ac9bb67e08d
+rocket_chat_tarball_sha256sum: 227811e14c28c0d6a3b65422226cb38e69376083224bd645443bd93ccc993463
 rocket_chat_automatic_upgrades: true
 rocket_chat_service_host: "{{ inventory_hostname }}"
