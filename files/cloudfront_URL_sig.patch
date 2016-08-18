@@ -1,26 +1,19 @@
-reverted:
---- b/bundle/programs/server/packages/rocketchat_file-upload.js  2016-06-08 21:30:03.515200186 +0000
-+++ a/bundle/programs/server/packages/rocketchat_file-upload.js  2016-06-08 04:23:31.256729119 +0000
-@@ -286,31 +286,65 @@
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                        //
- /* globals Slingshot, FileUpload, AWS, SystemLogger */                                                                 //
- var crypto = Npm.require('crypto');                                                                                    // 2
-                                                                                                                        //
- var S3accessKey, S3secretKey;                                                                                          // 4
+--- /root/rocketchat_file-upload.js	2016-08-18 16:18:33.635972167 +0000
++++ rocketchat_file-upload.js	2016-08-18 16:20:08.584789559 +0000
+@@ -307,25 +307,59 @@
                                                                                                                         //
  var generateURL = function (file) {                                                                                    // 6
  	if (!file || !file.s3) {                                                                                              // 7
  		return;                                                                                                              // 8
-+	};                                                                                                                    //
--	}                                                                                                                     //
+ 	}                                                                                                                     //
  	var resourceURL = '/' + file.s3.bucket + '/' + file.s3.path + file._id;                                               // 10
- 	var expires = parseInt(new Date().getTime() / 1000) + 60;                                                             // 11
+ 	var expires = parseInt(new Date().getTime() / 1000) + Math.max(5, S3expiryTimeSpan);                                  // 11
  	var StringToSign = 'GET\n\n\n' + expires + '\n' + resourceURL;                                                        // 12
  	var signature = crypto.createHmac('sha1', S3secretKey).update(new Buffer(StringToSign, 'utf-8')).digest('base64');    // 13
  	return file.url + '?AWSAccessKeyId=' + encodeURIComponent(S3accessKey) + '&Expires=' + expires + '&Signature=' + encodeURIComponent(signature);
- };                                                                                                                     //
-                                                                                                                        //
+-};                                                                                                                     //
++};
++                                                                                                                     //
 +var generateCDNURL = function (file) {
 +    if (!file || !file.s3) {
 +        return;
@@ -54,11 +47,11 @@ reverted:
 +    var cdnURL = file.url + "?" +  params.join('&');
 +    return cdnURL;
 +};
-+
+                                                                                                                        //
  FileUpload.addHandler('s3', {                                                                                          // 17
  	get: function (file, req, res) {                                                                                      // 18
-+		var fileUrl = generateCDNURL(file);                                                                                     // 19
 -		var fileUrl = generateURL(file);                                                                                     // 19
++		var fileUrl = generateCDNURL(file);                                                                                     // 19
                                                                                                                         //
  		if (fileUrl) {                                                                                                       // 21
  			res.setHeader('Location', fileUrl);                                                                                 // 22
