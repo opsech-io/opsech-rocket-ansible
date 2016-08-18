@@ -7,4 +7,5 @@
     - RocketChat.Server
 
   tasks:
-    - include: cloudfront_patch.yml
+    - include: tasks/cloudfront_patch.yml
+      tags: patch
