@@ -4,8 +4,10 @@
   become: yes
 
   roles:
-    - RocketChat.Server
+    - role: RocketChat.Server
+      rocket_chat_include_letsencrypt: true
+      rocket_chat_tarball_check_checksum: false
 
-  tasks:
-    - include: tasks/cloudfront_patch.yml
-      tags: patch
+  #  tasks:
+  #  - include: tasks/cloudfront_patch.yml
+  #    tags: patch
