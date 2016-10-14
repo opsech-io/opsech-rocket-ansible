@@ -4,6 +4,8 @@
   become: yes
 
   roles:
+    - role: gray-monarch.common/install-swapfile
+    - role: gray-monarch.common/update-system
     - role: RocketChat.Server
       rocket_chat_include_letsencrypt: true
       rocket_chat_tarball_check_checksum: false

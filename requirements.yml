@@ -1,2 +1,6 @@
 - src: RocketChat.Server
   version: master
+
+- name: gray-monarch.common
+  src: https://gitlab.com/gray-monarch/ansible-roles-common.git
+  scm: git
