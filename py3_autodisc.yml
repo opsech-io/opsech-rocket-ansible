@@ -1,0 +1,39 @@
+---
+# Please set "gather_facts: no" in the main play beforehand
+# Then "import_tasks: py3_autodisc.yml" in "pre_tasks:"
+
+- set_fact:
+    supported_dists:
+      - fedora
+      - korora
+      - kanolo
+
+- name: Get python version
+  raw: command -v python || command -v python3
+  register: python_path
+  changed_when: false
+
+- name: Get redhat_release information
+  raw: awk '{ print $1"\n"$3 }' /etc/redhat-release
+  register: redhat_release
+  failed_when: false
+  changed_when: false
+
+- name: Set ansible_python_interpreter for fedora hosts
+  set_fact:
+    ansible_python_interpreter: "{{ python_path.stdout_lines.0 }}"
+  when:
+    - (redhat_release.stdout_lines.0 | default(None) | lower) in
+        (supported_dists | lower)
+    - redhat_release.stdout_lines.1 | default(0) | int >= 23
+
+- name: Now gather_facts
+  setup:
+
+- debug:
+    var: "{{ item }}"
+    verbosity: 3
+  with_items:
+    - ansible_distribution
+    - ansible_distribution_major_version
+    - ansible_python_interpreter
