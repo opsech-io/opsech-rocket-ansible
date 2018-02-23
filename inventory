@@ -1,8 +1,17 @@
 [centos_servers]
+;chat.opsech.io
+
+[fedora_servers]
 chat.opsech.io
 
 [chat_servers:children]
 centos_servers
+fedora_servers
 
+[fedora_servers:vars]
+ansible_user = fedora
+
+[centos_servers:vars]
+ansible_user = centos
 
 
