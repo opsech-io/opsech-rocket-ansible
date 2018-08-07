@@ -10,9 +10,9 @@
     - import_tasks: install_sudo_user.yml
 
   roles:
-    - role: gray-monarch.common/install-swapfile
+#   - role: gray-monarch.common/install-swapfile
     - role: gray-monarch.common/update-system
     - role: RocketChat.Server
       rocket_chat_include_letsencrypt: true
-      rocket_chat_letsencrypt_force_renew: true
+      rocket_chat_letsencrypt_force_renew: false
       rocket_chat_tarball_check_checksum: false
